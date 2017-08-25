@@ -8,4 +8,14 @@ names = EveryPolitician::Wikidata.wikipedia_xpath(
   xpath: '//table//li//a[not(@class="new")]/@title',
 )
 
-EveryPolitician::Wikidata.scrape_wikidata(names: { en: names })
+# pick up any who are no longer active (and thus not in template)
+sparq = <<EOQ
+  SELECT ?item WHERE {
+    ?item p:P39 ?posn .
+    ?posn ps:P39 wd:Q18524027 ; pq:P582 ?end .
+    FILTER (?end >= "2015-12-03T00:00:00Z"^^xsd:dateTime) .
+  }
+EOQ
+exmembers = EveryPolitician::Wikidata.sparql(sparq)
+
+EveryPolitician::Wikidata.scrape_wikidata(ids: exmembers, names: { en: names })
