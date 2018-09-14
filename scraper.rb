@@ -5,7 +5,7 @@ require 'wikidata/fetcher'
 
 names = EveryPolitician::Wikidata.wikipedia_xpath(
   url: 'https://en.wikipedia.org/wiki/Template:Senate_of_Canada',
-  xpath: '//table//li//a[not(@class="new")]/@title',
+  xpath: '//table//a[not(@class="new")]/@title',
 )
 
 # pick up any who are no longer active (and thus not in template)
